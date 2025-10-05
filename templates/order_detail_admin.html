@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Detail Pesanan</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head><body class="bg-neutral-50">
+  {% include 'navbar.html' %}
+  <main class="max-w-4xl mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Pesanan #{{ order[0] }}</h1>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl shadow p-4">
+        <div class="text-sm">User: {{ order[1] }}</div>
+        <div class="text-sm">Status: <b>{{ order[2] }}</b></div>
+        <div class="text-sm">Total: <b>Rp {{ '{:,.0f}'.format(order[3]).replace(',', '.') }}</b></div>
+        <div class="text-sm">Pembayaran: {{ order[4] }} ({{ order[5] or 'pending' }})</div>
+        <div class="text-sm">Alamat: {{ order[6] }}</div>
+      </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <h2 class="font-semibold mb-2">Item</h2>
+        <ul class="text-sm space-y-1">
+          {% for it in items %}
+            <li>{{ it[1] }} × {{ it[3] }} — Rp {{ '{:,.0f}'.format(it[2]*it[3]).replace(',', '.') }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <form method="post" class="mt-4 flex flex-wrap gap-2">
+      <button name="action" value="terima" class="px-4 py-2 rounded bg-neutral-200 hover:bg-neutral-300">Terima</button>
+      <button name="action" value="proses" class="px-4 py-2 rounded bg-neutral-200 hover:bg-neutral-300">Proses</button>
+      <button name="action" value="selesai" class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">Selesaikan</button>
+      <button name="action" value="batal" class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">Batalkan</button>
+    </form>
+  </main>
+</body></html>
+

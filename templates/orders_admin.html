@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Kelola Pesanan</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head><body class="bg-neutral-50">
+  {% include 'navbar.html' %}
+  <main class="max-w-6xl mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Kelola Pesanan</h1>
+    <div class="mb-3 text-sm">
+      Filter:
+      <a href="{{ url_for('admin_orders') }}" class="underline">Semua</a> ·
+      <a href="{{ url_for('admin_orders', status='baru') }}" class="underline">Baru</a> ·
+      <a href="{{ url_for('admin_orders', status='diterima') }}" class="underline">Diterima</a> ·
+      <a href="{{ url_for('admin_orders', status='diproses') }}" class="underline">Diproses</a> ·
+      <a href="{{ url_for('admin_orders', status='selesai') }}" class="underline">Selesai</a> ·
+      <a href="{{ url_for('admin_orders', status='batal') }}" class="underline">Batal</a>
+    </div>
+
+    {% if orders %}
+      <div class="bg-white rounded-xl shadow overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead><tr class="text-left border-b">
+            <th class="py-2 px-3">#</th><th class="py-2 px-3">User</th>
+            <th class="py-2 px-3">Status</th><th class="py-2 px-3">Total</th>
+            <th class="py-2 px-3">Bayar</th><th class="py-2 px-3">Aksi</th>
+          </tr></thead>
+          <tbody>
+            {% for o in orders %}
+            <tr class="border-b">
+              <td class="py-2 px-3">#{{ o[0] }}</td>
+              <td class="py-2 px-3">{{ o[1] }}</td>
+              <td class="py-2 px-3">{{ o[2] }}</td>
+              <td class="py-2 px-3">Rp {{ '{:,.0f}'.format(o[3]).replace(',', '.') }}</td>
+              <td class="py-2 px-3">{{ o[4] }} ({{ o[5] or 'pending' }})</td>
+              <td class="py-2 px-3">
+                <a href="{{ url_for('admin_order_detail', order_id=o[0]) }}" class="text-red-600 hover:underline">Detail</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p>Tidak ada pesanan.</p>
+    {% endif %}
+  </main>
+</body></html>

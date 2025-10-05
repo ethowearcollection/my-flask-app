@@ -1,0 +1,106 @@
+<!-- templates/navbar.html (FINAL versi hijau + gear untuk Admin) -->
+<nav class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur border-b border-neutral-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16">
+    <div class="flex h-full items-center justify-between">
+
+      <!-- Brand / Logo -->
+      <a href="{{ url_for('dashboard') }}" class="flex items-center gap-2">
+        <img src="{{ url_for('static', filename='img/logo.PNG') }}" alt="ARV LOGAM" class="h-8 w-auto"/>
+      </a>
+
+      <!-- Desktop menu -->
+      <div class="hidden md:flex items-center gap-6">
+        {% set _role = role|default('user') %}
+
+        {% if _role == 'admin' %}
+          <!-- ===== MENU ADMIN ===== -->
+          <div class="relative" id="adminDropdown">
+            <button type="button"
+                    class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700">
+              <!-- icon gear -->
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14,12.94a1.66,1.66,0,0,0,0-1.88l2.11-1.65a.42.42,0,0,0,.1-.54l-2-3.46a.43.43,0,0,0-.52-.18l-2.49,1a6.34,6.34,0,0,0-1.63-.95L14.46,3.4a.43.43,0,0,0-.42-.35H10a.43.43,0,0,0-.42.35L9,6.28a6.34,6.34,0,0,0-1.63.95l-2.49-1a.43.43,0,0,0-.52.18l-2,3.46a.42.42,0,0,0,.1.54L4.6,11.06a1.66,1.66,0,0,0,0,1.88L2.49,14.59a.42.42,0,0,0-.1.54l2,3.46a.43.43,0,0,0,.52.18l2.49-1a6.34,6.34,0,0,0,1.63.95l.59,2.88a.43.43,0,0,0,.42.35h4a.43.43,0,0,0,.42-.35l.59-2.88a6.34,6.34,0,0,0,1.63-.95l2.49,1a.43.43,0,0,0,.52-.18l2-3.46a.42.42,0,0,0-.1-.54ZM12,15.5A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/></svg>
+              <span class="font-medium">Admin</span>
+              <svg class="h-4 w-4 text-white/80" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08z"/></svg>
+            </button>
+
+            <!-- Dropdown isi menu admin -->
+            <div class="absolute right-0 mt-2 w-60 rounded-xl border border-neutral-200 bg-white shadow-xl hidden">
+              <a href="{{ url_for('dashboard') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50">
+                <svg class="h-5 w-5 text-neutral-700" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v8h-5v-5H11v5H6v-8H3l9-8z"/></svg>
+                <span>Dashboard</span>
+              </a>
+              <a href="{{ url_for('addBarang') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50">
+                <svg class="h-5 w-5 text-emerald-600" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h16v18H4V3zm7 5v4H7v2h4v4h2v-4h4v-2h-4V8h-2z"/></svg>
+                <span>Tambah Barang</span>
+              </a>
+              <a href="{{ url_for('menuAdmin', roleMenu='kelolaUser') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50">
+                <svg class="h-5 w-5 text-violet-600" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm0 2c-3 0-7 1.5-7 4v2h14v-2c0-2.5-4-4-7-4Zm9 0a4 4 0 1 1-3.46 6H22v-2c0-2.5-4-4-7-4Z"/></svg>
+                <span>Kelola User</span>
+              </a>
+              <a href="{{ url_for('admin_orders') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50">
+                <svg class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor"><path d="M4 7h9v2H4V7Zm0 5h9v2H4v-2Zm0 5h9v2H4v-2Zm12-9 2 2 3-3-1.4-1.4L16 10.2l-.6-.6L14 11l2 2z"/></svg>
+                <span>Kelola Pesanan</span>
+              </a>
+            </div>
+          </div>
+        {% else %}
+          <!-- MENU USER -->
+          <a href="{{ url_for('dashboard') }}" class="text-sm text-neutral-700 hover:text-red-600">Dashboard</a>
+          <a href="{{ url_for('cart_view') }}" class="text-sm text-neutral-700 hover:text-red-600">
+            Keranjang{% if cart_count %} ({{ cart_count }}){% endif %}
+          </a>
+          <a href="{{ url_for('orders_me') }}" class="text-sm text-neutral-700 hover:text-red-600">Pesanan Saya</a>
+        {% endif %}
+
+        <!-- ===== PROFIL ===== -->
+        <div class="relative" id="profileDropdown">
+          <button type="button" class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-neutral-300 hover:bg-neutral-50">
+            <!-- icon user -->
+            <svg class="h-5 w-5 text-neutral-700" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 5a3 3 0 1 1-3 3 3 3 0 0 1 3-3Zm0 12a7 7 0 0 1-5.65-2.83 5 5 0 0 1 11.3 0A7 7 0 0 1 12 19Z"/></svg>
+            <span class="hidden lg:inline text-sm text-neutral-700">Halo, {{ nama|default('Pengguna') }}</span>
+            <svg class="h-4 w-4 text-neutral-500" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08z"/></svg>
+          </button>
+          <div class="absolute right-0 mt-2 w-56 rounded-xl border border-neutral-200 bg-white shadow-xl overflow-hidden hidden">
+            <a href="{{ url_for('editProfile') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50">
+              <svg class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v14H3V5Zm4 3h6v2H7V8Zm0 3h6v2H7v-2Zm10 4a3 3 0 1 0-6 0h6Z"/></svg>
+              <span>Profil</span>
+            </a>
+            <a href="{{ url_for('logout') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 text-red-600">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M16 13v-2H8V8l-5 4 5 4v-3h8Zm3 7H11a2 2 0 0 1-2-2v-3h2v3h8V6h-8v3H9V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2Z"/></svg>
+              <span>Keluar</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Spacer -->
+<div class="h-16"></div>
+
+<script>
+  // Admin dropdown
+  (function () {
+    const root = document.getElementById('adminDropdown');
+    if (!root) return;
+    const btn = root.querySelector('button');
+    const panel = root.querySelector('div.absolute');
+    btn.addEventListener('click', () => panel.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target)) panel.classList.add('hidden');
+    });
+  })();
+
+  // Profile dropdown
+  (function () {
+    const root = document.getElementById('profileDropdown');
+    if (!root) return;
+    const btn = root.querySelector('button');
+    const panel = root.querySelector('div.absolute');
+    btn.addEventListener('click', () => panel.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target)) panel.classList.add('hidden');
+    });
+  })();
+</script>

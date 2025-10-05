@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Checkout</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head><body class="bg-neutral-50">
+  {% include 'navbar.html' %}
+  <main class="max-w-3xl mx-auto p-4">
+    {% include 'flashProtection.html' %}
+    <h1 class="text-2xl font-bold mb-4">Checkout</h1>
+
+    <div class="bg-white rounded-xl shadow p-4 mb-4">
+      <h2 class="font-semibold mb-2">Ringkasan</h2>
+      <ul class="text-sm space-y-1">
+        {% for it in items %}
+          <li>{{ it[2] }} × {{ it[3] }} — Rp {{ '{:,.0f}'.format(it[5]).replace(',', '.') }}</li>
+        {% endfor %}
+      </ul>
+      <div class="mt-3 text-right font-bold text-red-600">
+        Total: Rp {{ '{:,.0f}'.format(total).replace(',', '.') }}
+      </div>
+    </div>
+
+    <form method="post" class="bg-white rounded-xl shadow p-4 space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Alamat Pengiriman</label>
+        <textarea name="shipping_address" rows="3" required class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Metode Pembayaran</label>
+        <select name="payment_method" class="border rounded px-3 py-2">
+          <option value="COD">Bayar di Tempat (COD)</option>
+          <option value="TRANSFER">Transfer Bank (manual)</option>
+        </select>
+        <p class="text-xs text-neutral-500 mt-1">Integrasi payment gateway bisa ditambahkan kemudian.</p>
+      </div>
+      <div class="flex justify-end">
+        <button class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Buat Pesanan</button>
+      </div>
+    </form>
+  </main>
+</body></html>

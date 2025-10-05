@@ -1,0 +1,148 @@
+<!-- templates/editProfile.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Profil Pengguna</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+  {% include 'flashProtection.html' %}
+
+  <div class="w-full max-w-lg bg-white rounded-lg shadow-md overflow-hidden">
+    <!-- Header -->
+    <div class="bg-red-600 py-4 px-6">
+      <h1 class="text-2xl font-bold text-white text-center">Edit Profil Pengguna</h1>
+    </div>
+
+    <!-- IMPORTANT: enctype untuk upload -->
+    <form method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+      <!-- Avatar -->
+      <div class="flex items-start gap-4">
+        <img
+          id="avatarPreview"
+          src="{{ avatar_url or url_for('static', filename='img/avatars/guest.png') }}"
+          alt="Avatar"
+          class="h-20 w-20 rounded-full object-cover border"
+          onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/avatars/guest.png') }}';"
+        />
+        <div class="flex-1">
+          <label for="avatarInput" class="block text-sm font-medium text-gray-700 mb-1">Foto Profil</label>
+          <input
+            type="file"
+            name="avatar"
+            id="avatarInput"
+            accept=".png,.jpg,.jpeg,.webp,image/*"
+            class="block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-red-600 file:text-white hover:file:bg-red-700 cursor-pointer"
+          />
+          <p class="text-xs text-gray-500 mt-1">Opsional. Format: png, jpg, jpeg, webp.</p>
+        </div>
+      </div>
+
+      <!-- Username -->
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+            <i class="fa-solid fa-user"></i>
+          </span>
+          <input
+            type="text" id="username" name="username"
+            class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            value="{{ user.username }}"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+          <input
+            type="password" id="password" name="password" placeholder="Masukkan password"
+            class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah password</p>
+      </div>
+
+      <!-- Nama -->
+      <div>
+        <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+            <i class="fa-regular fa-id-card"></i>
+          </span>
+          <input
+            type="text" id="nama" name="nama"
+            class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            value="{{ user.nama }}"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+            <i class="fa-regular fa-envelope"></i>
+          </span>
+          <input
+            type="email" id="email" name="email"
+            class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            value="{{ user.email }}"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- No HP -->
+      <div>
+        <label for="nohp" class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+            <i class="fa-solid fa-phone"></i>
+          </span>
+          <input
+            type="text" id="nohp" name="nohp"
+            class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            value="{{ user.nohp }}"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <button type="submit"
+              class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition flex items-center justify-center">
+        <i class="fa-solid fa-floppy-disk mr-2"></i> Simpan Perubahan
+      </button>
+      <a href="{{ url_for('dashboard') }}"
+         class="block text-center w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition">
+        Batal
+      </a>
+    </form>
+  </div>
+
+  <script>
+    // Preview avatar sebelum submit
+    const input = document.getElementById('avatarInput');
+    const img   = document.getElementById('avatarPreview');
+    input?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => { img.src = ev.target.result; };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>

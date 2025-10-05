@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Barang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-neutral-100 min-h-screen flex items-center justify-center p-4">
+  {% include 'flashProtection.html' %}
+  <div class="w-full max-w-xl bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div class="bg-red-600 py-4 px-6">
+      <h1 class="text-2xl font-bold text-white text-center">Edit Barang</h1>
+    </div>
+
+    <form method="POST"
+          action="{{ url_for('editBarang', id_barang=barang[0]) }}"
+          enctype="multipart/form-data"
+          class="p-6 space-y-5">
+
+      <!-- Nama -->
+      <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-1">Nama Barang</label>
+        <div class="relative">
+          <i class="fa-solid fa-box absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+          <input type="text" name="nama_barang" required
+                 value="{{ barang[1] if barang else '' }}"
+                 class="w-full pl-10 p-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"/>
+        </div>
+      </div>
+
+      <!-- Harga -->
+      <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-1">Harga</label>
+        <div class="relative">
+          <i class="fa-solid fa-tag absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+          <input type="text" name="harga" required
+                 value="{{ '{:,.0f}'.format(barang[2]).replace(',', '.') if barang else '' }}"
+                 placeholder="contoh: 150.000"
+                 class="w-full pl-10 p-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"/>
+        </div>
+        <p class="text-xs text-neutral-500 mt-1">Boleh pakai titik/koma. Contoh: 150.000 atau 150,000.00</p>
+      </div>
+
+      <!-- Deskripsi -->
+      <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-1">Deskripsi</label>
+        <div class="relative">
+          <i class="fa-solid fa-align-left absolute left-3 top-3 text-neutral-400"></i>
+          <textarea name="deskripsi" rows="3" required
+                    class="w-full pl-10 p-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">{{ barang[3] if barang else '' }}</textarea>
+        </div>
+      </div>
+
+      <!-- Foto -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Foto Produk (opsional)</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="rounded-md border p-2 bg-neutral-50">
+            <!-- Pakai konvensi yang sama dengan backend: <id>.png + cache-buster -->
+            <img id="preview"
+                 src="{{ url_for('static', filename='img/products/' ~ barang[0] ~ '.png') }}?v={{ range(1,1000000)|random }}"
+                 data-id="{{ barang[0] }}"
+                 data-tried="png"
+                 onerror="tryNextExt(this)"
+                 class="w-full h-40 object-contain"
+                 alt="preview">
+          </div>
+          <div class="flex items-center">
+            <input type="file" name="foto" accept=".png,.jpg,.jpeg,.webp,image/*"
+                   class="block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-red-600 file:text-white hover:file:bg-red-700 cursor-pointer">
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Maks. ~4MB. Format: png, jpg, jpeg, webp.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3 pt-2">
+        <button type="submit"
+                class="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-lg py-2.5 font-medium">
+          <i class="fa-solid fa-floppy-disk mr-2"></i>Simpan Perubahan
+        </button>
+        <a href="{{ url_for('menuAdmin', roleMenu='kelolaBarang') }}"
+           class="flex-1 text-center bg-neutral-200 hover:bg-neutral-300 text-neutral-800 rounded-lg py-2.5 font-medium">Batal</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Fallback berantai + cache-buster (selaras dengan dashboard)
+    function tryNextExt(img) {
+      const base  = "{{ url_for('static', filename='img/products/') }}";
+      const noimg = "{{ url_for('static', filename='img/no-image.png') }}";
+      const id    = img.getAttribute('data-id');
+      const tried = img.getAttribute('data-tried') || 'png';
+      const v     = Date.now();
+
+      if (tried === 'png') {
+        img.setAttribute('data-tried', 'jpg');
+        img.src = `${base}${id}.jpg?v=${v}`;
+      } else if (tried === 'jpg') {
+        img.setAttribute('data-tried', 'webp');
+        img.src = `${base}${id}.webp?v=${v}`;
+      } else {
+        img.onerror = null;
+        img.src = noimg + `?v=${v}`;
+      }
+    }
+
+    // Preview live saat admin memilih file baru
+    const fileInput = document.querySelector('input[name="foto"]');
+    const preview   = document.getElementById('preview');
+    fileInput?.addEventListener('change', e => {
+      const f = e.target.files?.[0];
+      if (f) preview.src = URL.createObjectURL(f);
+    });
+  </script>
+</body>
+</html>

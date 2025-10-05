@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Akun</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    {% include 'flashProtection.html' %}
+    <div class="w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden">
+      <!-- Header Form -->
+      <div class="bg-red-600 py-4 px-6">
+        <h1 class="text-2xl font-bold text-white text-center">Buat Pengguna</h1>
+      </div>
+
+      <!-- Form Container -->
+      <form
+        action="{{ url_for('addUser') }}"
+        method="post"
+        class="p-6 space-y-4"
+      >
+        <!-- Nama Lengkap -->
+        <div>
+          <label for="nama" class="block text-sm font-medium text-gray-700 mb-1"
+            >Nama Lengkap</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i class="fas fa-user text-gray-400"></i>
+            </div>
+            <input
+              type="text"
+              id="nama"
+              name="nama"
+              class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="Masukkan nama lengkap"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div>
+          <label
+            for="username"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Username</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i class="fas fa-at text-gray-400"></i>
+            </div>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="Buat username"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label
+            for="email"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Email</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i class="fas fa-envelope text-gray-400"></i>
+            </div>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="Masukkan email"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Nomor HP -->
+        <div>
+          <label for="nohp" class="block text-sm font-medium text-gray-700 mb-1"
+            >Nomor HP</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i class="fas fa-phone text-gray-400"></i>
+            </div>
+            <input
+              type="tel"
+              id="nohp"
+              name="nohp"
+              class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="Contoh: 08123456789"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label
+            for="password"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Password</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i class="fas fa-lock text-gray-400"></i>
+            </div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              placeholder="Buat password"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Konfirmasi Password -->
+        <div>
+          <label
+            for="confirm_password"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Konfirmasi Password</label
+          >
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i class="fas fa-lock text-gray-400"></i>
+            </div>
+            <input
+              type="password"
+              id="confirm_password"
+              name="confirm_password"
+              class="w-full pl-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="Ulangi password"
+              required
+            />
+          </div>
+        </div>
+
+        <input type="hidden" name="role" value="user" />
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 flex items-center justify-center"
+        >
+          <i class="fas fa-user-plus mr-2"></i> Create
+        </button>
+
+        <!-- Cancel Button - Using anchor tag for better semantics -->
+        <a
+          href="javascript:history.back()"
+          class="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition duration-300 flex items-center justify-center mt-3"
+        >
+          <i class="fas fa-times mr-2"></i> Batal
+        </a>
+      </form>
+    </div>
+  </body>
+</html>

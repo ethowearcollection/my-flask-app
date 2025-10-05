@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Pesanan Saya</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head><body class="bg-neutral-50">
+  {% include 'navbar.html' %}
+  <main class="max-w-5xl mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Pesanan Saya</h1>
+
+    {% if orders %}
+      <div class="bg-white rounded-xl shadow overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="py-2 px-3">#</th>
+              <th class="py-2 px-3">Status</th>
+              <th class="py-2 px-3">Total</th>
+              <th class="py-2 px-3">Pembayaran</th>
+              <th class="py-2 px-3">Waktu</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in orders %}
+              <tr class="border-b">
+                <td class="py-2 px-3">#{{ o[0] }}</td>
+                <td class="py-2 px-3">{{ o[1] }}</td>
+                <td class="py-2 px-3">Rp {{ '{:,.0f}'.format(o[2]).replace(',', '.') }}</td>
+                <td class="py-2 px-3">{{ o[3] }} ({{ o[4] or 'pending' }})</td>
+                <td class="py-2 px-3">{{ o[5] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-neutral-600">Belum ada pesanan. Silakan checkout dulu.</p>
+    {% endif %}
+  </main>
+</body></html>
